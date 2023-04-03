@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Ödev - Dokular</title>
+    <meta charset="utf-8" />
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <script src="three.js"></script>
+    <script src="OrbitControls.js"></script>
+    <script>
+
+
+        
+        var scene, camera, renderer, clock;
+
+    
+
+        init();
+
+        function init() {
+
+            scene = new THREE.Scene();
+
+            clock = new THREE.Clock();
+
+            camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 100 );
+            camera.position.set(-10,10,10);
+     
+            renderer = new THREE.WebGLRenderer();
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            renderer.setClearColor(new THREE.Color(0xaabbff));
+            document.body.appendChild( renderer.domElement );
+
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.target.set(0,0,0);
+            controls.update();
+
+            const dLight = new THREE.DirectionalLight(0xFFFFFF,1);
+            scene.add(dLight);
+            dLight.position.set(2,10, 10)
+
+            //Renk ile Kaplama
+            const gKup = new THREE.BoxGeometry(2,2,2);
+            const mKup = new THREE.MeshPhongMaterial();
+            const Kup = new THREE.Mesh(gKup, mKup);
+            mKup.color.set('#FF0');
+            mKup.flatShading = true;
+            scene.add(Kup);
+            Kup.position.x = 0;
+            Kup.position.y = +2;
+
+
+            // Aynı Desen ile Kutu Kaplama
+            const gBox1 = new THREE.BoxGeometry(2,2,2);
+            const lBox1 = new THREE.TextureLoader();
+            const mBox1 = new THREE.MeshBasicMaterial({
+                map: lBox1.load('GS.jpg'),
+            })
+            const Box1 = new THREE.Mesh(gBox1, mBox1);
+            scene.add(Box1);
+            Box1.position.x = -4;
+            Box1.position.y = +2;
+
+            //Kendi Dokumuzu Oluşturma    
+            function dokuOlusturma() {
+
+                const canvas = document.createElement("canvas");
+                canvas.width = 200;
+                canvas.height = 100;
+
+                const context = canvas.getContext("2d");
+
+                var gradient = context.createLinearGradient(0, 0, 200, 0);
+                gradient.addColorStop(0, "#ffff00");
+                gradient.addColorStop(1, "#ff0000");
+
+                context.fillStyle = gradient;
+                context.fillRect(0, 0, 200, 100);
+;
+
+                context.moveTo(0,0);
+                context.lineTo(100,25);
+                context.stroke();
+                
+                context.moveTo(20,100);
+                context.lineTo(10,10);
+                context.stroke();
+
+                context.beginPath();
+                context.arc(95, 50, 40, 0, 2 * Math.PI);
+                context.stroke();
+
+                context.font ="30px times new roman";
+                context.strokeText("Sefa Erkan", 40,60);
+
+                return new THREE.CanvasTexture(canvas);
+
+            }
+
+            const gBox3 = new THREE.BoxGeometry(4,2,4);
+            const mBox3 = new THREE.MeshBasicMaterial( { map: dokuOlusturma()});
+            const Box3= new THREE.Mesh(gBox3, mBox3);
+            scene.add(Box3);
+            Box3.position.z = +6
+
+
+            // Farklı  Desenler ile Kutu Kaplama
+            const gBox2 = new THREE.BoxGeometry(3,3,0.5);
+            const lBox2 = new THREE.TextureLoader();
+            const mBox2 = [
+                new THREE.MeshBasicMaterial({map: lBox2.load('ana2.jpg')}),
+                new THREE.MeshBasicMaterial({map: lBox2.load('kenar.jpg')}),
+                new THREE.MeshBasicMaterial({map: lBox2.load('ana2.jpg')}),
+                new THREE.MeshBasicMaterial({map: lBox2.load('ana2.jpg')}),
+                new THREE.MeshPhongMaterial({map: lBox2.load('ana2.jpg')}),
+                new THREE.MeshBasicMaterial({map: lBox2.load('ana2.jpg')}),
+            ];
+            const Box2 = new THREE.Mesh(gBox2, mBox2);
+            scene.add(Box2);
+            Box2.position.x = +4;
+            Box2.position.y = +2;
+
+
+            const buyukluk = 100;
+            const bolumler = 100;
+            const izgara = new THREE.GridHelper( buyukluk, bolumler );
+            scene.add( izgara );
+
+
+            animate();
+
+
+        }
+
+
+        function animate() {
+            requestAnimationFrame(animate); 
+
+            renderer.render(scene, camera);
+            
+        }
+
+    </script>
+</body>
+
+</html>

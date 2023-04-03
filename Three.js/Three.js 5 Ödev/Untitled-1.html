@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Hareket</title>
+    <meta charset="utf-8"/>
+    <style>
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="three.js"></script>
+    <script src="OrbitControls.js"></script>
+    <script>
+
+        var scene, camera, renderer, parts, parts1, clock;
+        
+        parts = [];
+        parts1 = [];
+        parts2 = [];
+        parts3 = [];
+        parts4 = [];
+        parts5 = [];
+
+        init();
+
+        function init(){
+            
+            scene = new THREE.Scene();
+
+            camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 100 );
+            camera.position.set(0,3,10);
+
+            const ambient = new THREE.HemisphereLight(0xffffbb, 0x080820);
+            scene.add(ambient);
+
+            const light = new THREE.DirectionalLight(0xffffff, 1);
+            light.position.set(1,10,6);
+            scene.add(light);
+
+            renderer = new THREE.WebGLRenderer();
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            renderer.setClearColor(new THREE.Color(0xaabbff));
+            document.body.appendChild( renderer.domElement );
+
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.target.set(0,4,0);
+            controls.update();
+
+            clock = new THREE.Clock();
+            clock.autoStart = false;
+
+            window.addEventListener('resize',resize, false);
+            window.addEventListener('click',onClick, false);
+            window.addEventListener('dblclick',onDBLClick, false);
+            window.addEventListener('keydown',onKeyDown, false);
+
+            const geometry = new THREE.CylinderGeometry( 3, 3, 5, 32 );
+            const material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+            const block = new THREE.Mesh( geometry, material );
+
+            const rast= Math.random() * 10; //Random Sayı 1 ile 9 arasında
+
+            const geometry1 = new THREE.PlaneGeometry( 35, 30 );
+            const material1 = new THREE.MeshBasicMaterial( {color: 0xffff00 * rast, side: THREE.DoubleSide} );
+            const plane1 = new THREE.Mesh( geometry1, material1 );
+               
+            for(let i=0; i<2;i++){
+                const mesh = block.clone();
+                
+                parts.push(mesh);
+
+                if(i==0) {
+                    scene.add(mesh);
+                } else {
+                    mesh.position.y = 5+1;
+                    parts[i-1].add(mesh);
+                }
+                
+            }
+            parts[0].position.x=-15;
+            parts[0].position.y=-3;
+            //parts[0].position.z=1;
+
+            for(let i=0; i<3;i++){
+                const mesh = block.clone();
+                
+                parts1.push(mesh);
+
+                if(i==0) {
+                    scene.add(mesh);
+                } else {
+                    mesh.position.y = 5+1;
+                    parts1[i-1].add(mesh);
+                }
+            }
+            parts1[0].position.x=-5;
+            parts1[0].position.y=3;
+
+            for(let i=0; i<4;i++){
+                const mesh = block.clone();
+                
+                parts2.push(mesh);
+
+                if(i==0) {
+                    scene.add(mesh);
+                } else {
+                    mesh.position.y = 5+1;
+                    parts2[i-1].add(mesh);
+                }
+            }
+            parts2[0].position.x=5;
+            parts2[0].position.y=3;
+
+            for(let i=0; i<3;i++){
+                const mesh = block.clone();
+                
+                parts3.push(mesh);
+
+                if(i==0) {
+                    scene.add(mesh);
+                } else {
+                    mesh.position.y = 5+1;
+                    parts3[i-1].add(mesh);
+                }
+            }
+            parts3[0].position.x=15;
+            parts3[0].position.y=3;
+
+            for(let i=0; i<2;i++){
+                const mesh = block.clone();
+                
+                parts4.push(mesh);
+
+                if(i==0) {
+                    scene.add(mesh);
+                } else {
+                    mesh.position.y = 5+1;
+                    parts4[i-1].add(mesh);
+                }
+            }
+            parts4[0].position.x=25;
+            parts4[0].position.y=2.5;
+
+            for(let i=0; i<1;i++){
+                const mesh = plane1.clone();
+                
+                parts5.push(mesh);
+
+                if(i==0) {
+                    scene.add(mesh);
+                } else {
+                    mesh.position.y = 5+1;
+                    parts5[i-1].add(mesh);
+                }
+            }
+            parts5[0].position.set(6,-15,0);
+            
+            
+            animate();
+
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+            const theta = Math.sin(clock.getElapsedTime());
+            parts.forEach(part => part.rotation.x = theta);
+            parts1.forEach(part => part.rotation.x = theta);
+            parts2.forEach(part => part.rotation.x = theta);
+            parts3.forEach(part => part.rotation.x = theta);
+            parts4.forEach(part => part.rotation.x = theta);
+            //parts5.forEach(part => part.rotation.z = theta);
+
+        }
+        
+        function resize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function onClick(){
+            console.log(clock.getElapsedTime());
+        }
+        
+        function onDBLClick(){
+
+            if(clock.running){
+                clock.stop();
+            } else{
+                clock.start();
+            }
+            
+        }
+
+        function onKeyDown(){
+            clock.autoStart = true;
+        }
+ 
+        
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Hareket</title>
+    <meta charset="utf-8"/>
+    <style>
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="three.js"></script>
+    <script src="OrbitControls.js"></script>
+    <script>
+
+        var scene, camera, renderer, parts, clock;
+        
+        parts = [];
+
+        init();
+
+        function init(){
+            
+            scene = new THREE.Scene();
+
+            camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 100 );
+            camera.position.set(0,3,10);
+
+            const ambient = new THREE.HemisphereLight(0xffffbb, 0x080820);
+            scene.add(ambient);
+
+            const light = new THREE.DirectionalLight(0xffffff, 1);
+            light.position.set(1,10,6);
+            scene.add(light);
+
+            renderer = new THREE.WebGLRenderer();
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            renderer.setClearColor(new THREE.Color(0xaabbff));
+            document.body.appendChild( renderer.domElement );
+
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.target.set(0,4,0);
+            controls.update();
+
+            clock = new THREE.Clock();
+            clock.autoStart = false;
+
+            window.addEventListener('resize',resize, false);
+            window.addEventListener('click',onClick, false);
+            window.addEventListener('dblclick',onDBLClick, false);
+            window.addEventListener('keydown',onKeyDown, false);
+
+            const geometry = new THREE.BoxBufferGeometry(1,3,1);
+            const material = new THREE.MeshPhongMaterial();
+            const block = new THREE.Mesh(geometry, material);
+
+            for(let i=0; i<4;i++){
+                const mesh = block.clone();
+                
+                parts.push(mesh);
+
+                if(i==0) {
+                    scene.add(mesh);
+                } else {
+                    mesh.position.y = 3;
+                    parts[i-1].add(mesh);
+                }
+                
+            }
+            
+            animate();
+        }
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+            const theta = Math.sin(clock.getElapsedTime());
+            parts.forEach(part => part.rotation.z = theta);
+            
+        }
+        
+        function resize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function onClick(){
+            console.log(clock.getElapsedTime());
+        }
+        
+        function onDBLClick(){
+
+            if(clock.running){
+                clock.stop();
+            } else{
+                clock.start();
+            }
+            
+        }
+
+        function onKeyDown(){
+            clock.autoStart = true;
+        }
+ 
+        
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Konu 10 - Dokunmatik Aygıtlar</title>
+    <meta charset="utf-8" />
+    
+    <style>
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="three.js"></script>
+    <script src="OrbitControls.js"></script>
+    <script>
+
+        var scene, camera, renderer, volume;
+        var sound1, sound2, sound3, sound4, sound5, sound6, sound7;
+        var mSound1, mSound2, mSound3, mSound4, mSound4, mSound5, mSound6, mSound7;
+
+    
+
+        init();
+
+        function init() {
+
+            scene = new THREE.Scene();
+
+            clock = new THREE.Clock();
+
+            camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.1, 100 );
+            camera.position.set(0,0,10);
+     
+            renderer = new THREE.WebGLRenderer();
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            renderer.setClearColor(new THREE.Color(0xaabbff));
+            document.body.appendChild( renderer.domElement );
+
+            //const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            //controls.target.set(0,0,0);
+           // controls.update();
+
+
+            const gSound1 = new THREE.BoxGeometry(2,2,4);
+            const mSound1 = new THREE.MeshBasicMaterial({color: 'white'});
+            const oSound1 = new THREE.Mesh(gSound1, mSound1);
+            scene.add(oSound1);
+            oSound1.position.x = -6;
+            
+
+            const gSound2 = new THREE.BoxGeometry(2,2,4);
+            const mSound2 = new THREE.MeshBasicMaterial({color: 'white'});
+            const oSound2 = new THREE.Mesh(gSound2, mSound2);
+            scene.add(oSound2);
+            oSound2.position.x = -4;
+            
+
+            const gSound3 = new THREE.BoxGeometry(2,2,4);
+            const mSound3 = new THREE.MeshBasicMaterial({color: 'white'});
+            const oSound3 = new THREE.Mesh(gSound3, mSound3);
+            scene.add(oSound3);
+            oSound3.position.x = -2;
+
+            const gSound4 = new THREE.BoxGeometry(2,2,4);
+            const mSound4 = new THREE.MeshBasicMaterial({color: 'white'});
+            const oSound4 = new THREE.Mesh(gSound4, mSound4);
+            scene.add(oSound4);
+            oSound4.position.x = 0;
+
+            const gSound5 = new THREE.BoxGeometry(2,2,4);
+            const mSound5 = new THREE.MeshBasicMaterial({color: 'white'});
+            const oSound5 = new THREE.Mesh(gSound5, mSound5);
+            scene.add(oSound5);
+            oSound5.position.x = 2;
+
+            const gSound6 = new THREE.BoxGeometry(2,2,4);
+            const mSound6 = new THREE.MeshBasicMaterial({color: 'white'});
+            const oSound6 = new THREE.Mesh(gSound6, mSound6);
+            scene.add(oSound6);
+            oSound6.position.x = 4;
+
+            const gSound7 = new THREE.BoxGeometry(2,2,4);
+            const mSound7 = new THREE.MeshBasicMaterial({color: 'white'});
+            const oSound7 = new THREE.Mesh(gSound7, mSound7);
+            scene.add(oSound7);
+            oSound7.position.x = 6;
+
+            const listener = new THREE.AudioListener();
+            camera.add( listener );
+
+            sound1 = new THREE.Audio( listener );
+            sound2 = new THREE.Audio( listener );
+            sound3 = new THREE.Audio( listener );
+            sound4 = new THREE.Audio( listener );
+            sound5 = new THREE.Audio( listener );
+            sound6 = new THREE.Audio( listener );
+            sound7 = new THREE.Audio( listener );
+
+            const audioLoader = new THREE.AudioLoader();
+           
+            audioLoader.load( 'notes/G1.mp3', function( buffer ) {
+                sound1.setBuffer( buffer );
+                sound1.setLoop( false );
+                sound1.setVolume( 1 );
+            },
+            );
+            audioLoader.load( 'notes/G2.mp3', function( buffer ) {
+                sound2.setBuffer( buffer );
+                sound2.setLoop( false );
+                sound2.setVolume( 1 );
+            },
+            );
+            audioLoader.load( 'notes/G3.mp3', function( buffer ) {
+                sound3.setBuffer( buffer );
+                sound3.setLoop( false );
+                sound3.setVolume( 1 );
+            },
+            );
+            audioLoader.load( 'notes/G4.mp3', function( buffer ) {
+                sound4.setBuffer( buffer );
+                sound4.setLoop( false );
+                sound4.setVolume( 1 );
+            },
+            );
+            audioLoader.load( 'notes/G5.mp3', function( buffer ) {
+                sound5.setBuffer( buffer );
+                sound5.setLoop( false );
+                sound5.setVolume( 1 );
+            },
+            );
+            audioLoader.load( 'notes/G6.mp3', function( buffer ) {
+                sound6.setBuffer( buffer );
+                sound6.setLoop( false );
+                sound6.setVolume( 1 );
+            },
+            );
+            audioLoader.load( 'notes/G7.mp3', function( buffer ) {
+                sound7.setBuffer( buffer );
+                sound7.setLoop( false );
+                sound7.setVolume( 1 );
+            },
+            );
+            
+
+          
+            animate();
+
+            
+            document.addEventListener("keydown", keyPlay, false);
+            
+            document.addEventListener("touchstart", touchStartPlay  , false);
+            document.addEventListener("touchend", touchEndPlay, false);
+
+            
+            function touchStartPlay() {
+                mSound1.color.set('green');
+                
+                if(sound1.isPlaying) {
+                    sound1.stop();
+                    sound1.play();
+                } else {
+                    sound1.play();
+                }
+                
+            }
+            
+
+            function touchEndPlay() {
+                mSound1.color.set('blue');
+                 if(sound7.isPlaying) {
+                    sound7.stop();
+                    sound7.play();
+                } else {
+                    sound7.play();
+                }
+            }
+
+             function keyPlay(event) {
+
+                var keyCode = event.which;
+
+                mSound1.color.set('white');
+                mSound2.color.set('white');
+                mSound3.color.set('white');
+                mSound4.color.set('white');
+                mSound5.color.set('white');
+                mSound6.color.set('white');
+                mSound7.color.set('white');
+
+                if(keyCode == 49) {
+                    if(sound1.isPlaying) {
+
+                        sound1.stop();
+                        sound1.play();
+                    } else {
+                        sound1.play();
+                        mSound1.color.set('red');
+                    }   
+                }
+                if(keyCode == 50) {
+                    if(sound2.isPlaying) {
+                        sound2.stop();
+                        sound2.play();
+                    } else {
+                        sound2.play();
+                        mSound2.color.set('red');
+                    }   
+                }
+                if(keyCode == 51) {
+                    if(sound3.isPlaying) {
+                        sound3.stop();
+                        sound3.play();
+                    } else {
+                        sound3.play();
+                        mSound3.color.set('red');
+                    }   
+                }
+                if(keyCode == 52) {
+                    if(sound4.isPlaying) {
+                        sound4.stop();
+                        sound4.play();
+                    } else {
+                        sound4.play();
+                        mSound4.color.set('red');
+                    }   
+                }
+                if(keyCode == 53) {
+                    if(sound5.isPlaying) {
+                        sound5.stop();
+                        sound5.play();
+                    } else {
+                        sound5.play();
+                        mSound5.color.set('red');
+                    }   
+                }
+                if(keyCode == 54) {
+                    if(sound6.isPlaying) {
+                        sound6.stop();
+                        sound6.play();
+                    } else {
+                        sound6.play();
+                        mSound6.color.set('red');
+                    }   
+                }
+                if(keyCode == 55) {
+                    if(sound7.isPlaying) {
+                        sound7.stop();
+                        sound7.play();
+                    } else {
+                        sound7.play();
+                        mSound7.color.set('red');
+                    }   
+                }
+
+
+
+                renderer.render(scene, camera);
+
+            }
+             
+        }
+
+        function animate() {
+            
+            requestAnimationFrame(animate); 
+            renderer.render(scene, camera);
+            
+        }
+        
+        
+
+    </script>
+</body>
+
+</html>

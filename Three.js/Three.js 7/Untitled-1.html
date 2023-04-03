@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Ağırlık Merkezi</title>
+    <meta charset="utf-8"/>
+    <style>
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="three.js"></script>
+    <script src="OrbitControls.js"></script>
+    <script>
+
+        var scene, camera, renderer, clock;
+        var solkutu, ortakutu, sagkutu;
+        var position;
+        
+
+        init();
+
+        function init(){
+            
+            scene = new THREE.Scene();
+
+            clock = new THREE.Clock();
+
+            camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 100 );
+            camera.position.set(0,3,10);
+
+            renderer = new THREE.WebGLRenderer();
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            renderer.setClearColor(new THREE.Color(0xaabbff));
+            document.body.appendChild( renderer.domElement );
+
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.target.set(0,0,0);
+            controls.update();
+
+            
+            const gsolkutu = new THREE.BoxGeometry(1,1,1);
+            const msolkutu = new THREE.MeshBasicMaterial({color: 0xff00ff});
+            solkutu = new THREE.Mesh(gsolkutu, msolkutu);
+            scene.add(solkutu);
+            solkutu.position.x = 0;
+
+            const gortakutu = new THREE.BoxBufferGeometry(1,1,1);
+            const mortakutu = new THREE.MeshBasicMaterial({color: 0x0000ff});
+            ortakutu = new THREE.Mesh(gortakutu, mortakutu);
+            scene.add(ortakutu);
+            ortakutu.position.x = 0;
+
+            const gsagkutu = new THREE.BoxGeometry(1,1,1);
+            const msagkutu = new THREE.MeshBasicMaterial({color: 0x00ffff});
+            sagkutu = new THREE.Mesh(gsagkutu, msagkutu);
+            scene.add(sagkutu);
+            sagkutu.position.x = 0;
+
+            
+            const buyukluk = 100;
+            const bolumler = 100;
+            const izgara = new THREE.GridHelper(buyukluk,bolumler);
+            scene.add(izgara);
+
+            gsolkutu.vertices.forEach(vertex => vertex.x -= 4 );
+            gsolkutu.vertices.forEach(vertex => vertex.y += 0 );
+            gsolkutu.vertices.forEach(vertex => vertex.z += 0 );
+
+            gsagkutu.vertices.forEach(vertex => vertex.x -= 8);
+            gsagkutu.vertices.forEach(vertex => vertex.y += 0);
+            gsagkutu.vertices.forEach(vertex => vertex.z += 0);
+
+            position = gortakutu.getAttribute('position');
+            // position.array[0] += 1;
+            // position.array[3] += 1;
+            // position.array[6] += 1;
+            // position.array[9] += 1;
+
+            for(let i=0; i <position.array.length; i+=3) {
+                position.array[i] +=3;
+            }
+
+            for(let i=1; i <position.array.length; i+=3) {
+                position.array[i] +=3;
+            }
+
+            for(let i=2; i <position.array.length; i+=3) {
+                position.array[i] +=3;
+            }
+
+
+
+
+
+            animate();
+
+            
+
+
+        }
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            solkutu.rotation.y += 0.01;
+            ortakutu.rotation.y += 0.01;
+            sagkutu.rotation.y += 0.001;
+            renderer.render(scene, camera);
+            
+        }
+ 
+        
+    </script>
+</body>
+
+</html>

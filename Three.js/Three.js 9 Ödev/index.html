@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Konu 8 - Skybox Textures</title>
+    <meta charset="utf-8" />
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+
+    <script src="three.js"></script>
+    <script src="OrbitControls.js"></script>
+    <script src="GLTFLoader.js"></script>
+    <script>
+
+        var scene, camera, renderer;
+
+        var mSkybox1 = [];
+        var mSkybox2 = [];
+        var mSkybox3 = [];
+        var controls;
+  
+
+        init();
+
+        function init() {
+
+            scene = new THREE.Scene();
+
+
+            camera = new THREE.PerspectiveCamera( 55, window.innerWidth / window.innerHeight, 0.1, 1000 );
+            camera.position.set(0,1,50);
+
+            renderer = new THREE.WebGLRenderer({antialias: true});
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            renderer.setClearColor(new THREE.Color(0xaabbff));
+            document.body.appendChild( renderer.domElement );
+
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.update();
+
+           
+            const frontSide1 = new THREE.TextureLoader().load('zeus_ft.jpg');
+            const backSide1 = new THREE.TextureLoader().load('zeus_bk.jpg');
+            const topSide1 = new THREE.TextureLoader().load('zeus_up.jpg');
+            const bottomSide1 = new THREE.TextureLoader().load('zeus_dn.jpg');
+            const rightSide1 = new THREE.TextureLoader().load('zeus_rt.jpg');
+            const leftSide1 = new THREE.TextureLoader().load('zeus_lf.jpg');
+            
+            mSkybox1.push(new THREE.MeshBasicMaterial({map: frontSide1}));
+            mSkybox1.push(new THREE.MeshBasicMaterial({map: backSide1}));
+            mSkybox1.push(new THREE.MeshBasicMaterial({map: topSide1}));
+            mSkybox1.push(new THREE.MeshBasicMaterial({map: bottomSide1}));
+            mSkybox1.push(new THREE.MeshBasicMaterial({map: rightSide1}));
+            mSkybox1.push(new THREE.MeshBasicMaterial({map: leftSide1}));
+        
+            let gSkybox1 = new THREE.BoxGeometry(10,10,10); 
+            let skybox1 = new THREE.Mesh(gSkybox1, mSkybox1);
+            scene.add(skybox1);
+
+            for(let i=0; i<6; i++) {
+                mSkybox1[i].side = THREE.BackSide;
+            }
+
+            skybox1.position.x=15;
+
+
+            const frontSide2 = new THREE.TextureLoader().load('arid_ft.jpg');
+            const backSide2 = new THREE.TextureLoader().load('arid_bk.jpg');
+            const topSide2 = new THREE.TextureLoader().load('arid_up.jpg');
+            const bottomSide2 = new THREE.TextureLoader().load('arid_dn.jpg');
+            const rightSide2 = new THREE.TextureLoader().load('arid_rt.jpg');
+            const leftSide2 = new THREE.TextureLoader().load('arid_lf.jpg');
+            
+            mSkybox2.push(new THREE.MeshBasicMaterial({map: frontSide2}));
+            mSkybox2.push(new THREE.MeshBasicMaterial({map: backSide2}));
+            mSkybox2.push(new THREE.MeshBasicMaterial({map: topSide2}));
+            mSkybox2.push(new THREE.MeshBasicMaterial({map: bottomSide2}));
+            mSkybox2.push(new THREE.MeshBasicMaterial({map: rightSide2}));
+            mSkybox2.push(new THREE.MeshBasicMaterial({map: leftSide2}));
+        
+            let gSkybox2 = new THREE.BoxGeometry(10,10,10);
+            let skybox2 = new THREE.Mesh(gSkybox2, mSkybox2);
+            scene.add(skybox2);
+
+
+
+
+            
+
+
+            
+
+
+            
+
+
+            
+
+
+        
+
+
+            
+
+            window.addEventListener('resize', resize, false);
+
+            window.addEventListener('keydown', onCameraView, false);
+
+            function onCameraView(event) {
+
+                var keyCode = event.which;
+       
+
+                if(keyCode == 49) {
+                    camera.position.x =-30;
+                    camera.position.z =0;
+                    controls.target.set(-30,0,0);
+                    camera.lookAt.set(0,1,0);
+                    controls.update();
+                }
+                if(keyCode == 50) {
+                    camera.position.x =0;
+                    camera.position.z =0;
+                    controls.target.set(0,0,0);
+                    camera.lookAt.set(0,1,0);
+                    controls.update();
+                }
+                if(keyCode == 51) {
+                    camera.position.x =30;
+                    camera.position.z =0;
+                    controls.target.set(30,0,0);
+                    camera.lookAt.set(0,1,0);
+                    controls.update();
+                }
+
+                renderer.render(scene, camera);
+
+                }
+            animate();
+
+
+        }
+
+        function animate() {
+
+            requestAnimationFrame(animate); 
+            renderer.render(scene, camera);
+            
+        }
+
+        function resize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+                        
+        
+
+    </script>
+</body>
+
+</html>

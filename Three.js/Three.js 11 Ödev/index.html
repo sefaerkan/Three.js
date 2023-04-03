@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Ödev 10 - Dokunmatik Aygıtlar</title>
+    <meta charset="utf-8" />
+    
+    <style>
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="three.js"></script>
+    <script src="OrbitControls.js"></script>
+    <script>
+
+        var scene, camera, renderer, volume;
+
+
+        init();
+
+        function init() {
+
+            scene = new THREE.Scene();
+
+            clock = new THREE.Clock();
+
+            camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.1, 100 );
+            camera.position.set(0,0,10);
+     
+            renderer = new THREE.WebGLRenderer();
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            renderer.setClearColor(new THREE.Color(0xaabbff));
+            document.body.appendChild( renderer.domElement );
+
+            const geometry = new THREE.CircleGeometry( 2, 22 );
+            const material = new THREE.MeshBasicMaterial({color: 'white'});
+            const circle = new THREE.Mesh( geometry, material );
+            scene.add( circle );
+            circle.position.set(-10,0,1);
+
+            const geometry1 = new THREE.CircleGeometry( 2, 22 );
+            const material1 = new THREE.MeshBasicMaterial({color: 'red'});
+            const circle1 = new THREE.Mesh( geometry1, material1 );
+            scene.add( circle1 );
+            circle1.position.set(10,0,1);
+
+
+            animate();
+
+            
+            document.addEventListener("keydown", keyPlay, false);
+            
+            document.addEventListener("touchstart", touchStartPlay  , false);
+            document.addEventListener("touchend", touchEndPlay, false);
+            document.addEventListener("touchmove", touchMovePlay, false);
+
+            
+            function touchStartPlay() {
+                material.color.set('green');
+                material1.color.set('black');
+                circle.position.set(5,5,1);
+                circle1.position.set(-5,5,1);      
+            }
+
+            function touchMovePlay() {
+                material.color.set('blue');
+                material1.color.set('green');
+                circle.position.set(5,-5,1);
+                circle1.position.set(-5,-5,1);      
+            }
+            
+
+            function touchEndPlay() {
+                material.color.set('white');
+                material1.color.set('red');
+                circle.position.set(-10,0,1);
+                circle1.position.set(10,0,1);
+                
+                
+            }
+
+            function keyPlay(event) {
+                
+            }
+     
+             
+        }
+
+        function animate() {
+            
+            requestAnimationFrame(animate); 
+            renderer.render(scene, camera);
+            
+        }
+        
+        
+
+    </script>
+</body>
+
+</html>
